@@ -1,0 +1,42 @@
+# CAPSTONE
+AI Chatbot for Department Information System
+(66011220 Siraphat, 66011597 Sukit, 66110030 Aditia, 66110103 Chalisa)
+
+1. Vector Database (For RAG & AI Search)
+The Options: FAISS vs. ChromaDB.
+My Recommendation: ChromaDB.
+Why? ChromaDB is incredibly developer-friendly and built specifically for LLM applications. It runs easily as a local database or a server and integrates perfectly with frameworks like LangChain or LlamaIndex.
+The Trade-off to mention: "We considered FAISS because it is exceptionally fast at massive scale (developed by Meta). However, for a department-level document scale, ChromaDB provides more than enough speed while offering much easier persistence (saving data to disk) and metadata filtering, which is vital for our 'Credit Analyzer' feature."
+
+2. Traditional Database (For Chat History & Users)
+The Options: SQLite vs. PostgreSQL.
+My Recommendation: Start with SQLite, design for PostgreSQL.
+Why? For a Capstone prototype, you don't want to waste days configuring database servers. SQLite requires zero setup—it's just a file in your project folder. However, you should use an ORM (Object-Relational Mapper) like SQLAlchemy in Python.
+The Trade-off to mention: "We are currently using SQLite for rapid prototyping and local testing. Because we use SQLAlchemy, our code is database-agnostic. Moving to a production-grade PostgreSQL database in the future would only require changing a single line of code (the database URL connection string)."
+
+3. Frontend (The Website / Chat UI)
+The Options: Streamlit vs. React.
+My Recommendation: Streamlit (Unless you have a dedicated Frontend Developer on your team).
+Why? Your project's true value is the AI and the RAG architecture. Streamlit is written entirely in Python and has built-in chat UI components (st.chat_message). You can build a fully functional, decent-looking chat interface with file upload capabilities in about 50 lines of Python code.
+The Trade-off to mention: "React would give us 100% control over the UI/UX design and better performance for thousands of concurrent users. However, we chose Streamlit to maximize our development time on the core AI/RAG logic and the specific Credit Analyzer algorithms, which are the main focus of this Capstone."
+
+4. Backend System (The API Server)
+The Options: FastAPI vs. Flask.
+My Recommendation: FastAPI.
+Why? FastAPI is the modern standard for AI backends. It is incredibly fast, natively supports asynchronous programming (which is extremely important when your server is waiting for the Typhoon LLM to generate a response), and it automatically generates interactive API documentation (Swagger UI).
+The Trade-off to mention: "While Flask is simpler and widely known, we chose FastAPI because its asynchronous nature handles LLM streaming responses much better. Furthermore, the automatic API documentation made connecting our Frontend to the Backend significantly easier."
+
+Summary of Your Ideal Capstone Stack:
+AI Backend: Python, FastAPI, LangChain/LlamaIndex.
+AI Models: Typhoon-v2.1-12B (LLM), bge-m3 (Embedding).
+Databases: ChromaDB (Vector), SQLite (Traditional).
+Frontend UI: Streamlit.
+
+USE! The Website as a Data Source (Input) 
+RAI, KMITL website is a goldmine of information (curriculum updates, staff directories, lab rules, and FAQs). Instead of manually copying and pasting that text into PDFs, you can use Web Scraping.
+How it fits into your Architecture: In your "File Pipeline/Data Processing" step, alongside your PDF Parser, you add a Web Scraper (using Python libraries like BeautifulSoup or Selenium).
+The Process: The scraper reads the department website $\rightarrow$ extracts the raw text $\rightarrow$ sends it to the Text Cleaner $\rightarrow$ Chunks it $\rightarrow$ Embeds it $\rightarrow$ saves it to your Vector Database (ChromaDB).
+Why this looks great to the committee: It shows you know how to handle multi-modal unstructured data (both offline documents and live web pages).
+
+
+
